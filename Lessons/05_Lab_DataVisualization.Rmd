@@ -76,6 +76,12 @@ Exercise: build your own scatterplots of PeterPaul.chem.nutrients
 # Change the ylab name
 
 
+Temps.by.day <- ggplot(subset(PeterPaul.chem.nutrients, depth ==0), aes(x = sampledate, y = temperature_C)) + 
+  geom_point(aes(color=year4)) +  facet_wrap(vars(lakename), nrow = 2) +ylab(expression(" Surface Temp (C)"))
+print(Temps.by.day)
+
+#function subset is to get surface temp only (depth is zero) or you can filter the data beforehand 
+
 #2. 
 # Plot temperature by date. Color your points by depth.
 # Change the size of your point to 0.5
@@ -83,6 +89,9 @@ Exercise: build your own scatterplots of PeterPaul.chem.nutrients
 # Change x axis to include marker/labels every 5 years
 
 
+ggplot(PeterPaul.chem.nutrients, aes(x = sampledate, y = temperature_C)) + 
+  geom_point(aes(color=depth, size =0.5))  + scale_color_viridis(option = "magma", direction = -1) +
+scale_x_date(date_breaks= "5 years", date_labels= "%Y") + ylab("Temperature C") 
 
 
 ```
