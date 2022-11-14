@@ -76,16 +76,55 @@ What other variables can we add to improve model?
 ```{r}
 
 #Exercise 4: Build correlation plots and identify more possible explanatory variables to add to the regression.
+#found in 06_Part1
+#install.packages("corrplot")
 
+#from Luana in class
+EPAair.subset <- 
+  EPAair %>%
+    select(meanLat:Ozone) %>%
+      na.omit()
 
+##so either create a subset so corrplot knows what to do with NAs and then use this as the dataframe, or include it below within the code
 
+library(corrplot)
+EPAaircorplot <- 
+  EPAair %>%
+  select(meanLat : Ozone) %>%
+  na.omit()
+EPACorr <- cor(EPAaircorplot)
+corrplot(EPACorr, method = "ellipse")
+corrplot.mixed(EPACorr, upper = "ellipse")
+
+#the stronger the line (shape of the circle), value, or color, the more of a correlation
+#meanLat, Month, and Ozone are showing the strongest correlations, so use them for the next steps 
 
 #Exercise 5: Choose a model by AIC in a Stepwise Algorithm. Do the results from AIC match the variables you selected on Exercise 5?
+#found in 06_part1
+
+#EPA.naomit <- EPAair %>%
+  #select(PM2.5) %>%
+  #na.omit()
+
+ALL <- lm(data = EPAair, PM2.5 ~ meanLat + Year + meanLng + Ozone)
+summary(ALL)
+
+#small p values means significant correlation, so Ozone, Month, MeanLng, and meanLat are significant 
+#this shows very similar results to 
+
+step(ALL)
+#step tells you if you remove X, you can improve AIC... if you remove Year, you will improve the AIC, there's a one number small AIC
 
 
+
+step(AIC)
+TPmodel <- lm(data = EPAair, PM2.5 ~ meanLat + meanLng + Ozone)
+summary(TPmodel)
 
 
 #Exercise 6: Run another regression using the variables selected on Exercise 6. Compare r-squared value with the one from Exercise 5. 
+
+
 
 ```
 
@@ -103,12 +142,19 @@ Litter.Totals <- Litter %>%
 Litter.Totals.anova <- aov(data = Litter.Totals, dryMass ~ plotID)
 summary(Litter.Totals.anova)
 
+#usually do post-hoc tests so you can group levels better ? 
+
+
 # Extract groupings for pairwise relationships
 Litter.Totals.groups <- HSD.test(Litter.Totals.anova, "plotID", group = TRUE)
 Litter.Totals.groups$groups
 
+
+#all the groups with the same letters means the mean values are equal 
+
 Litter.Totals <- Litter %>%
   mutate( treatgroups = Litter.Totals.groups$groups[plotID,2])
+
 
 # Graph the results
 Litter.Totals.plot <- ggplot(Litter.Totals, aes(x = plotID, y = dryMass)) +
@@ -121,8 +167,19 @@ Litter.Totals.plot <- ggplot(Litter.Totals, aes(x = plotID, y = dryMass)) +
   ylim(0, 85)
 print(Litter.Totals.plot)
 
+
+#we can improve the plot, if we can group all the a's, b's, c's etc together!
+
 ```
 
 ```{r}
-#Exercise 7: Improve the plot```
+#Exercise 7: Improve the plot
+
+
+
+
+
+
+
+
 
